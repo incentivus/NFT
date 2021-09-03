@@ -2,21 +2,17 @@
 
 pragma solidity ^0.7.6;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155MetadataURI.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "./Role/Operator.sol";
 
-contract SampleNFT is Ownable, ERC721, Operator {
-    
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+contract SampleNFT is Ownable, ERC1155, Operator {
 
-    constructor(string memory _name, string memory _symbol) 
-        ERC721(
-            _name, 
-            _symbol
+    constructor(string memory _uri) 
+        ERC1155(
+            _uri
         ) 
     {}
 
@@ -28,16 +24,12 @@ contract SampleNFT is Ownable, ERC721, Operator {
         _removeOperator(account);
     }
 
-    function mintToCaller(address caller, string memory tokenURI) 
+    function mintToCaller(address caller, uint256 id, uint256 amount, bytes memory data) 
         public onlyOperator
-        returns (uint256)
     {
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
-        _mint(caller, newItemId);
-        _setTokenURI(newItemId, tokenURI);
+        _mint(caller, id, amount, data);
+        //_setTokenURI(newItemId, tokenURI);
 
-        return newItemId;
     }
     // tokenURI points to a JSON file that conforms to the "ERC721 Metadata JSON Schema".
 }
