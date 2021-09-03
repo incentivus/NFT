@@ -5,7 +5,7 @@ import { solidity, MockProvider } from "ethereum-waffle"
 
 import { SampleNFT } from "../src/types/SampleNFT"
 import { SampleNFT__factory } from "../src/types/factories/SampleNFT__factory"
-import { exception } from "console"
+// import { exception } from "console"
 
 use(solidity)
 
@@ -16,8 +16,7 @@ describe("SampleNFT", async () => {
 
     let sampleNFT: SampleNFT
 
-    let name = "Another Sample NFT"
-    let symbol = "TEnft"
+    let uri = "it.is.only.a.uri"
 
     beforeEach(async () => {
         [signer, signer2, signer3] = await ethers.getSigners()
@@ -26,13 +25,12 @@ describe("SampleNFT", async () => {
 
     const deploySampleNFT = async (_signer?: Signer): Promise<SampleNFT> => {
         const sampleNFTFactory = new SampleNFT__factory(_signer || signer)
-        const sampleNFT = await sampleNFTFactory.deploy(name, symbol)
+        const sampleNFT = await sampleNFTFactory.deploy(uri)
         return sampleNFT
     }
 
     it("initialize contract correctly", async () => {
-        expect(await sampleNFT.name()).to.equal("Another Sample NFT")
-        expect(await sampleNFT.symbol()).to.equal("TEnft")
+        expect(await sampleNFT.uri(0)).to.equal("it.is.only.a.uri")
 
         let signer1Address = await signer.getAddress()
 
@@ -49,14 +47,15 @@ describe("SampleNFT", async () => {
     it("minting an NFT by operator", async () => {
         let signer2Address = await signer2.getAddress()
         let signer3Address = await signer3.getAddress()
-        let uri = "https:this.is.a.sample.uri"
-
+       
         await sampleNFT.addOperator(signer2Address)
 
         let sampleNFTAsSigner2 = sampleNFT.connect(signer2)
+        
+        let simpleData = "0x1234"
 
-        await sampleNFTAsSigner2.mintToCaller(signer3Address, uri)
+        await sampleNFTAsSigner2.mintToCaller(signer3Address, 10, 1, simpleData)
 
-        expect(await sampleNFT.balanceOf(signer3Address)).to.equal(1)
+        expect(await sampleNFT.balanceOf(signer3Address, 10)).to.equal(1)
     })
 })
