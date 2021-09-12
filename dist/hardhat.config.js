@@ -1,47 +1,38 @@
-import { HardhatUserConfig } from "hardhat/config"
-import { HttpNetworkUserConfig } from "hardhat/types"
-
-import "@nomiclabs/hardhat-ethers"
-import "@nomiclabs/hardhat-waffle"
-import "solidity-coverage"
-import "hardhat-typechain"
-import "hardhat-deploy"
-import "hardhat-gas-reporter"
-import "@tenderly/hardhat-tenderly"
-import "@nomiclabs/hardhat-etherscan"
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-waffle");
+require("solidity-coverage");
+require("hardhat-typechain");
+require("hardhat-deploy");
+require("hardhat-gas-reporter");
+require("@tenderly/hardhat-tenderly");
+require("@nomiclabs/hardhat-etherscan");
 // read MNEMONIC from env variable
-let mnemonic = process.env.MNEMONIC
-let privateKey = process.env.PRIVATE_KEY
-let etherscanKey = process.env.ETHERSCAN_KEY
-let projectId = process.env.PROJECT_ID
-
-const accounts = mnemonic
-    ? { mnemonic }
+var mnemonic = process.env.MNEMONIC;
+var privateKey = process.env.PRIVATE_KEY;
+var etherscanKey = process.env.ETHERSCAN_KEY;
+var projectId = process.env.PROJECT_ID;
+var accounts = mnemonic
+    ? { mnemonic: mnemonic }
     : privateKey
-    ? [`0x${privateKey}`]
-    : undefined
-
-const infuraNetwork = (
-    network: string,
-    chainId?: number,
-    gas?: number
-): HttpNetworkUserConfig => {
+        ? ["0x" + privateKey]
+        : undefined;
+var infuraNetwork = function (network, chainId, gas) {
     return {
-        url: `https://${network}.infura.io/v3/${projectId}`,
-        chainId,
-        gas,
-        accounts,
+        url: "https://" + network + ".infura.io/v3/" + projectId,
+        chainId: chainId,
+        gas: gas,
+        accounts: accounts,
         gasPrice: "auto",
-    }
-}
-
-const config: HardhatUserConfig = {
+    };
+};
+var config = {
     networks: {
-        hardhat: mnemonic ? { accounts: { mnemonic } } : {},
+        hardhat: mnemonic ? { accounts: { mnemonic: mnemonic } } : {},
         localhost: {
             url: "http://localhost:8545",
-            accounts,
+            accounts: accounts,
         },
         mainnet: infuraNetwork("mainnet", 1, 6283185),
         ropsten: infuraNetwork("ropsten", 3, 6283185),
@@ -51,23 +42,23 @@ const config: HardhatUserConfig = {
         matic: {
             url: "https://rpc-mainnet.maticvigil.com/",
             chainId: 137,
-            accounts,
+            accounts: accounts,
         },
         matic_testnet: {
             url: "https://rpc-mumbai.matic.today",
             chainId: 80001,
-            accounts,
+            accounts: accounts,
         },
         bsc: {
             url: "https://bsc-dataseed.binance.org/",
             chainId: 56,
             gasPrice: "auto",
-            accounts,
+            accounts: accounts,
         },
         bsc_testnet: {
             url: "https://data-seed-prebsc-1-s1.binance.org:8545",
             chainId: 97,
-            accounts,
+            accounts: accounts,
         },
     },
     etherscan: {
@@ -76,7 +67,7 @@ const config: HardhatUserConfig = {
     solidity: {
         compilers: [
             {
-                version: "0.8.4",
+                version: "0.7.6",
                 settings: {
                     optimizer: {
                         enabled: true,
@@ -99,6 +90,5 @@ const config: HardhatUserConfig = {
             default: 0,
         },
     },
-}
-
-export default config
+};
+exports.default = config;

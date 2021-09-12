@@ -9,7 +9,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     let name = "Another Sample NFT";
     let symbol = "TEnft"
 
-    await deploy("ASnft", {
+    await deploy("SampleNFT", {
         from: deployer,
         log: true,
         skipIfAlreadyDeployed: true,

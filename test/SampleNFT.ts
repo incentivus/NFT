@@ -5,7 +5,7 @@ import { solidity, MockProvider } from "ethereum-waffle"
 
 import { SampleNFT } from "../src/types/SampleNFT"
 import { SampleNFT__factory } from "../src/types/factories/SampleNFT__factory"
-import { exception } from "console"
+import exception  from "console"
 
 use(solidity)
 
