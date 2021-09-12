@@ -35,7 +35,7 @@ contract SampleNFT is Ownable, ERC721, Operator {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(caller, newItemId);
-        _setTokenURI(newItemId, tokenURI);
+        //_setTokenURI(newItemId, tokenURI);
 
         return newItemId;
     }
