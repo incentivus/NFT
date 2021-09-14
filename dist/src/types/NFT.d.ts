@@ -19,10 +19,11 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface IERC721MetadataInterface extends ethers.utils.Interface {
+interface NFTInterface extends ethers.utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "createToken(string)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
@@ -40,6 +41,7 @@ interface IERC721MetadataInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(functionFragment: "createToken", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
@@ -77,6 +79,10 @@ interface IERC721MetadataInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "createToken",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -117,7 +123,7 @@ interface IERC721MetadataInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
-export class IERC721Metadata extends Contract {
+export class NFT extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -158,7 +164,7 @@ export class IERC721Metadata extends Contract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IERC721MetadataInterface;
+  interface: NFTInterface;
 
   functions: {
     approve(
@@ -173,25 +179,32 @@ export class IERC721Metadata extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    balanceOf(
-      owner: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { balance: BigNumber }>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "balanceOf(address)"(
       owner: string,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { balance: BigNumber }>;
+    ): Promise<[BigNumber]>;
+
+    createToken(
+      tokenURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "createToken(string)"(
+      tokenURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string] & { operator: string }>;
+    ): Promise<[string]>;
 
     "getApproved(uint256)"(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string] & { operator: string }>;
+    ): Promise<[string]>;
 
     isApprovedForAll(
       owner: string,
@@ -212,12 +225,12 @@ export class IERC721Metadata extends Contract {
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string] & { owner: string }>;
+    ): Promise<[string]>;
 
     "ownerOf(uint256)"(
       tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string] & { owner: string }>;
+    ): Promise<[string]>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -230,19 +243,19 @@ export class IERC721Metadata extends Contract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      data: BytesLike,
+      _data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setApprovalForAll(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "setApprovalForAll(address,bool)"(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -304,6 +317,16 @@ export class IERC721Metadata extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  createToken(
+    tokenURI: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "createToken(string)"(
+    tokenURI: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -348,19 +371,19 @@ export class IERC721Metadata extends Contract {
     from: string,
     to: string,
     tokenId: BigNumberish,
-    data: BytesLike,
+    _data: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setApprovalForAll(
     operator: string,
-    _approved: boolean,
+    approved: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "setApprovalForAll(address,bool)"(
     operator: string,
-    _approved: boolean,
+    approved: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -419,6 +442,16 @@ export class IERC721Metadata extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    createToken(
+      tokenURI: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "createToken(string)"(
+      tokenURI: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -463,19 +496,19 @@ export class IERC721Metadata extends Contract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      data: BytesLike,
+      _data: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setApprovalForAll(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
     "setApprovalForAll(address,bool)"(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -564,6 +597,16 @@ export class IERC721Metadata extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    createToken(
+      tokenURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "createToken(string)"(
+      tokenURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -611,19 +654,19 @@ export class IERC721Metadata extends Contract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      data: BytesLike,
+      _data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "setApprovalForAll(address,bool)"(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -689,6 +732,16 @@ export class IERC721Metadata extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    createToken(
+      tokenURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "createToken(string)"(
+      tokenURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -736,19 +789,19 @@ export class IERC721Metadata extends Contract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      data: BytesLike,
+      _data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setApprovalForAll(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "setApprovalForAll(address,bool)"(
       operator: string,
-      _approved: boolean,
+      approved: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

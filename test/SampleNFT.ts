@@ -60,3 +60,4 @@ describe("SampleNFT", async () => {
         expect(await sampleNFT.balanceOf(signer3Address)).to.equal(1)
     })
 })
+
