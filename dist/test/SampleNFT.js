@@ -42,10 +42,9 @@ var ethereum_waffle_1 = require("ethereum-waffle");
 var SampleNFT__factory_1 = require("../src/types/factories/SampleNFT__factory");
 chai_1.use(ethereum_waffle_1.solidity);
 describe("SampleNFT", function () { return __awaiter(void 0, void 0, void 0, function () {
-    var signer, signer2, signer3, sampleNFT, name, symbol, deploySampleNFT;
+    var signer, signer2, signer3, sampleNFT, uri, deploySampleNFT;
     return __generator(this, function (_a) {
-        name = "Another Sample NFT";
-        symbol = "TEnft";
+        uri = "it.is.only.a.uri";
         beforeEach(function () { return __awaiter(void 0, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
@@ -66,7 +65,7 @@ describe("SampleNFT", function () { return __awaiter(void 0, void 0, void 0, fun
                 switch (_a.label) {
                     case 0:
                         sampleNFTFactory = new SampleNFT__factory_1.SampleNFT__factory(_signer || signer);
-                        return [4 /*yield*/, sampleNFTFactory.deploy(name, symbol)];
+                        return [4 /*yield*/, sampleNFTFactory.deploy(uri)];
                     case 1:
                         sampleNFT = _a.sent();
                         return [2 /*return*/, sampleNFT];
@@ -74,25 +73,21 @@ describe("SampleNFT", function () { return __awaiter(void 0, void 0, void 0, fun
             });
         }); };
         it("initialize contract correctly", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var _a, _b, signer1Address, _c;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var _a, signer1Address, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         _a = chai_1.expect;
-                        return [4 /*yield*/, sampleNFT.name()];
+                        return [4 /*yield*/, sampleNFT.uri(0)];
                     case 1:
-                        _a.apply(void 0, [_d.sent()]).to.equal("Another Sample NFT");
-                        _b = chai_1.expect;
-                        return [4 /*yield*/, sampleNFT.symbol()];
-                    case 2:
-                        _b.apply(void 0, [_d.sent()]).to.equal("TEnft");
+                        _a.apply(void 0, [_c.sent()]).to.equal("it.is.only.a.uri");
                         return [4 /*yield*/, signer.getAddress()];
-                    case 3:
-                        signer1Address = _d.sent();
-                        _c = chai_1.expect;
+                    case 2:
+                        signer1Address = _c.sent();
+                        _b = chai_1.expect;
                         return [4 /*yield*/, sampleNFT.owner()];
-                    case 4:
-                        _c.apply(void 0, [_d.sent()]).to.equal(signer1Address);
+                    case 3:
+                        _b.apply(void 0, [_c.sent()]).to.equal(signer1Address);
                         return [2 /*return*/];
                 }
             });
@@ -116,7 +111,7 @@ describe("SampleNFT", function () { return __awaiter(void 0, void 0, void 0, fun
             });
         }); });
         it("minting an NFT by operator", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var signer2Address, signer3Address, uri, sampleNFTAsSigner2, _a;
+            var signer2Address, signer3Address, sampleNFTAsSigner2, simpleData, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, signer2.getAddress()];
@@ -125,16 +120,16 @@ describe("SampleNFT", function () { return __awaiter(void 0, void 0, void 0, fun
                         return [4 /*yield*/, signer3.getAddress()];
                     case 2:
                         signer3Address = _b.sent();
-                        uri = "https:this.is.a.sample.uri";
                         return [4 /*yield*/, sampleNFT.addOperator(signer2Address)];
                     case 3:
                         _b.sent();
                         sampleNFTAsSigner2 = sampleNFT.connect(signer2);
-                        return [4 /*yield*/, sampleNFTAsSigner2.mintToCaller(signer3Address, uri)];
+                        simpleData = "0x1234";
+                        return [4 /*yield*/, sampleNFTAsSigner2.mintToCaller(signer3Address, 10, 1, simpleData)];
                     case 4:
                         _b.sent();
                         _a = chai_1.expect;
-                        return [4 /*yield*/, sampleNFT.balanceOf(signer3Address)];
+                        return [4 /*yield*/, sampleNFT.balanceOf(signer3Address, 10)];
                     case 5:
                         _a.apply(void 0, [_b.sent()]).to.equal(1);
                         return [2 /*return*/];

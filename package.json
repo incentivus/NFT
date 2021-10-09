@@ -6,11 +6,7 @@
     "test": "test"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@openzeppelin/contracts": "^4.3.1",
-=======
-    "@openzeppelin/contracts": "3.4.2",
->>>>>>> main
     "@openzeppelin/test-helpers": "^0.5.10",
     "@remix-project/remixd": "^0.5.0",
     "config": "^3.3.6",
