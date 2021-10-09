@@ -5,7 +5,11 @@ import { solidity, MockProvider } from "ethereum-waffle"
 
 import { SampleNFT } from "../src/types/SampleNFT"
 import { SampleNFT__factory } from "../src/types/factories/SampleNFT__factory"
+<<<<<<< HEAD
+import exception  from "console"
+=======
 // import { exception } from "console"
+>>>>>>> main
 
 use(solidity)
 
@@ -59,3 +63,4 @@ describe("SampleNFT", async () => {
         expect(await sampleNFT.balanceOf(signer3Address, 10)).to.equal(1)
     })
 })
+
