@@ -52,14 +52,14 @@ contract NFT is ERC721URIStorage {
 
 
       /* Returns only items that a user has purchased */
-  function fetchMyNFTs() public view returns (NFTItem[] memory) {
+  function fetchMyNFTs(address myAddress) public view returns (NFTItem[] memory) {
     uint256 totalTokenCount = _tokenIds.current();
     uint256 tokenCount = 0;
     uint256 currentIndex = 0;
 
     for (uint256 i = 0; i < totalTokenCount; i++) {
       // address memory theAddress = ownerOf(i + 1);
-      if (ownerOf(i + 1) == msg.sender) {
+      if (ownerOf(i + 1) == myAddress) {
         tokenCount += 1;
       }
     }
@@ -68,7 +68,7 @@ contract NFT is ERC721URIStorage {
     for (uint256 i = 0; i < totalTokenCount; i++) {
       // address memory theAddress = ownerOf(i + 1); 
 
-      if (ownerOf(i + 1) == msg.sender) {
+      if (ownerOf(i + 1) == myAddress) {
         uint256 currentId = i + 1;
         string memory currentURI = tokenURI(currentId);
 
