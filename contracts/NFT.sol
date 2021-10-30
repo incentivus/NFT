@@ -13,6 +13,11 @@ contract NFT is ERC721URIStorage {
     Counters.Counter private _tokenIds;
     address contractAddress;
 
+    struct NFTItem {
+    uint256 tokenId;
+    string tokenURI;
+  }
+
     constructor(address marketplaceAddress) ERC721("Metaverse Tokens", "METT") {
         contractAddress = marketplaceAddress;
     }
@@ -47,7 +52,7 @@ contract NFT is ERC721URIStorage {
 
 
       /* Returns only items that a user has purchased */
-  function fetchMyNFTs() public view returns (string[] memory) {
+  function fetchMyNFTs() public view returns (NFTItem[] memory) {
     uint256 totalTokenCount = _tokenIds.current();
     uint256 tokenCount = 0;
     uint256 currentIndex = 0;
@@ -59,14 +64,24 @@ contract NFT is ERC721URIStorage {
       }
     }
 
-    string[] memory items = new string[](tokenCount);
+    NFTItem[] memory items = new NFTItem[](tokenCount);
     for (uint256 i = 0; i < totalTokenCount; i++) {
       // address memory theAddress = ownerOf(i + 1); 
 
       if (ownerOf(i + 1) == msg.sender) {
         uint256 currentId = i + 1;
-        string memory currentItem = tokenURI(currentId);
-        items[currentIndex] = currentItem;
+        string memory currentURI = tokenURI(currentId);
+
+        // NFTItem memory currentItem = NFTItem(
+        //     tokenId: currentId,
+        //     tokenURI: currentURI
+        // )
+
+        items[currentIndex] = NFTItem(
+            currentId,
+            currentURI
+        );
+
         currentIndex += 1;
       }
     }
