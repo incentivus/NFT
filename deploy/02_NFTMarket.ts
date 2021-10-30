@@ -6,17 +6,13 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const { deploy } = deployments
     const { deployer } = await getNamedAccounts()
 
-    let uri = "https://this.is.the.base-uri"
-
-    await deploy("SampleNFT", {
+    await deploy("NFTMarket", {
         from: deployer,
         log: true,
         skipIfAlreadyDeployed: true,
-        args: [
-            uri
-        ],
+        args: [],
     })
 }
 
 export default func
-export const tags = ["SampleNFT"]
+export const tags = ["NFTMarket"]
