@@ -10,7 +10,7 @@
     "@openzeppelin/test-helpers": "^0.5.10",
     "@remix-project/remixd": "^0.5.0",
     "config": "^3.3.6",
-    "mermaid": "^8.10.1"
+    "mermaid": "^9.1.2"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
